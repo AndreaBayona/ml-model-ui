@@ -23,8 +23,16 @@ export const FormPage: React.FC = () => {
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
     console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+      latitude: data.get('latitude'),
+      longitude: data.get('longitude'),
+      region: data.get('region'),
+      building_type: data.get('building_type'),
+      object_type: data.get('object_type'),
+      level: data.get('level'),
+      levels: data.get('levels'),
+      rooms: data.get('rooms'),
+      area: data.get('area'),
+      kitchen_area: data.get('kitchen_area'),
     });
   };
 
