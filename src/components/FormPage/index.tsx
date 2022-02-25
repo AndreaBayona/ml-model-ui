@@ -209,7 +209,7 @@ export const FormPage: React.FC = () => {
             <LightbulbIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Predicted price (en rublos)
+            Predicted price (ruble)
           </Typography>
           { price &&
             <Typography component="div" variant="h6">
