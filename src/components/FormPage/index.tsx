@@ -19,8 +19,14 @@ const theme = createTheme();
 
 const getNumberFromInput = (data: any, input: string) => Number.parseFloat(data.get(input)!.toString())
 
+const defaultInputProps = {
+  inputProps: {step: "any"},
+  required: true,
+  fullWidth: true
+}
+
 export const FormPage: React.FC = () => {
-  const [price, setPrice] = React.useState<number | undefined>();
+  const [price, setPrice] = React.useState<string>("");
   const [loading, setLoading] = React.useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -42,12 +48,14 @@ export const FormPage: React.FC = () => {
     try {
       setLoading(true);
       const res = await predictPrice(params);
-      console.log(res)
-      setPrice(1);
+      console.log(res.response)
+      setPrice(res.response)
       setLoading(false);
     }
     catch (e) {
       console.error(e)
+      setLoading(false);
+      setPrice("Error processing the request");
     }
   };
 
@@ -74,95 +82,85 @@ export const FormPage: React.FC = () => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   name="latitude"
-                  required
-                  fullWidth
                   id="latitude"
                   label="Latitude"
                   type="number"
                   autoComplete="latitude"
+                  {...defaultInputProps}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
-                  fullWidth
                   id="longitude"
                   label="Longitude"
                   name="longitude"
                   type="number"
                   autoComplete="longitude"
+                  {...defaultInputProps}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
-                  fullWidth
                   id="region"
                   label="Region"
                   name="region"
                   type="number"
                   autoComplete="region"
+                  {...defaultInputProps}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
-                  fullWidth
                   name="building_type"
                   label="Building type"
                   id="building_type"
                   type="number"
                   autoComplete="building_type"
+                  {...defaultInputProps}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
-                  fullWidth
                   name="object_type"
                   label="Object type"
                   id="object_type"
                   type="number"
                   autoComplete="object_type"
+                  {...defaultInputProps}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
-                  fullWidth
                   name="level"
                   label="Level"
                   id="level"
                   type="number"
                   autoComplete="level"
+                  {...defaultInputProps}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
-                  fullWidth
                   name="levels"
                   label="Levels"
                   id="levels"
                   type="number"
                   autoComplete="levels"
+                  {...defaultInputProps}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
-                  fullWidth
                   name="rooms"
                   label="Rooms"
                   id="rooms"
                   type="number"
                   autoComplete="rooms"
+                  {...defaultInputProps}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
-                  fullWidth
                   name="area"
                   label="Area"
                   id="area"
@@ -171,12 +169,11 @@ export const FormPage: React.FC = () => {
                   InputProps={{
                     endAdornment: <InputAdornment position="end">m^2</InputAdornment>,
                   }}
+                  {...defaultInputProps}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
-                  fullWidth
                   name="kitchen_area"
                   label="Kitchen area"
                   id="kitchen_area"
@@ -185,6 +182,7 @@ export const FormPage: React.FC = () => {
                   InputProps={{
                     endAdornment: <InputAdornment position="end">m^2</InputAdornment>,
                   }}
+                  {...defaultInputProps}
                 />
               </Grid>
             </Grid>
@@ -211,11 +209,11 @@ export const FormPage: React.FC = () => {
             <LightbulbIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Predicted price
+            Predicted price (en rublos)
           </Typography>
           { price &&
             <Typography component="div" variant="h6">
-              {price} (rublos)
+              {price}
             </Typography> }
           { loading && <CircularProgress /> }
         </Box>
