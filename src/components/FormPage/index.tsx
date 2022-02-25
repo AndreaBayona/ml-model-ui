@@ -3,37 +3,52 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import SettingsIcon from '@mui/icons-material/Settings';
+import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import InputAdornment from '@mui/material/InputAdornment';
+import CircularProgress from '@mui/material/CircularProgress';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {predictPrice} from "../../services";
 
 
 const theme = createTheme();
 
+const getNumberFromInput = (data: any, input: string) => Number.parseFloat(data.get(input)!.toString())
+
 export const FormPage: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [price, setPrice] = React.useState<number | undefined>();
+  const [loading, setLoading] = React.useState(false);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      latitude: data.get('latitude'),
-      longitude: data.get('longitude'),
-      region: data.get('region'),
-      building_type: data.get('building_type'),
-      object_type: data.get('object_type'),
-      level: data.get('level'),
-      levels: data.get('levels'),
-      rooms: data.get('rooms'),
-      area: data.get('area'),
-      kitchen_area: data.get('kitchen_area'),
-    });
+    const params = {
+      latitude: getNumberFromInput(data, 'latitude'),
+      longitude: getNumberFromInput(data,'longitude'),
+      region: getNumberFromInput(data,'region'),
+      building_type: getNumberFromInput(data,'building_type'),
+      object_type: getNumberFromInput(data,'object_type'),
+      level: getNumberFromInput(data, 'level'),
+      levels: getNumberFromInput(data, 'levels'),
+      rooms: getNumberFromInput(data,'rooms'),
+      area: getNumberFromInput(data,'area'),
+      kitchen_area: getNumberFromInput(data, 'kitchen_area')
+    };
+
+    try {
+      setLoading(true);
+      const res = await predictPrice(params);
+      console.log(res)
+      setPrice(1);
+      setLoading(false);
+    }
+    catch (e) {
+      console.error(e)
+    }
   };
 
   return (
@@ -54,7 +69,7 @@ export const FormPage: React.FC = () => {
           <Typography component="h1" variant="h5">
             Set up model variables
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -182,6 +197,27 @@ export const FormPage: React.FC = () => {
               Predict
             </Button>
           </Box>
+        </Box>
+        <br/>
+        <Box
+          sx={{
+            marginTop: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LightbulbIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Predicted price
+          </Typography>
+          { price &&
+            <Typography component="div" variant="h6">
+              {price} (rublos)
+            </Typography> }
+          { loading && <CircularProgress /> }
         </Box>
       </Container>
     </ThemeProvider>
