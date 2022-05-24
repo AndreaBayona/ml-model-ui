@@ -21,11 +21,11 @@ function App() {
       >
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
-            Polynomial Regression Model
+            Clasificación de Etapas del COVID mediante el análisis de Imágenes de Rayos X
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+      <Container component="main" maxWidth="lg" sx={{ mb: 4 }}>
         <ImageField/>
       </Container>
     </div>
