@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import './App.css';
 import {FormPage} from "./components/FormPage";
+import {ImageField} from "./components/ImageField";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
         </Toolbar>
       </AppBar>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <FormPage/>
+        <ImageField/>
       </Container>
     </div>
   );
